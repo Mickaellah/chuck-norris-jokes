@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React from 'react';
 import style from 'styled-components';
 
 import RandomJoke from '../components/RandomJoke/RandomJoke';

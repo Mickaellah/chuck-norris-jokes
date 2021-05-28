@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {Context} from '../../context/context';
 
@@ -18,7 +18,7 @@ export default function ButtonsAndTextFields() {
         lastName,
         handleFirstNameInput,
         handleLastNameInput,
-        getOtherJokeFromOtherNames
+        getOtherJokeFromOtherNames,
     } = useContext(Context);
 
     const NerdyJoke = "http://api.icndb.com/jokes/random?limitTo=[nerdy]";
@@ -70,7 +70,9 @@ export default function ButtonsAndTextFields() {
 
             <div>
                 <CounterButton />
-                <Buttons type="submit" text="Save Jokes" />
+                <a href={`${joke}`} download="joke.txt">
+                    Save Jokes
+                </a>
             </div>
         </form>
     )

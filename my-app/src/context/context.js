@@ -10,8 +10,8 @@ function ContextProvider(props) {
     const [isTyped, setIsTyped] = useState(true);
 
     const MainAPI = "http://api.icndb.com/jokes/random";
-    const NumberAPI = `http://api.icndb.com/jokes/${count}`;
     const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${firstName}&lastName=${lastName}`;
+    const NumberAPI = `http://api.icndb.com/jokes/${count}`;
 
 
     const getRandomJoke = async () => {
@@ -36,11 +36,19 @@ function ContextProvider(props) {
         setJoke(data);
     }
 
-    const getAJokeByNumber = async () => {
-        const response = await fetch(NumberAPI);
-        const data = await response.json();
-        console.log(data);
-    }
+    // const getAJokeByNumber = async () => {
+    //     const response = await fetch(NumberAPI);
+    //     const data = await response.json();
+    //     setJoke(data);
+    // }
+
+    const getAJokeByNumber = () => new Promise((resolve, reject) => {
+        fetch(NumberAPI)
+            .then(response => response.text())
+            .then(data => {
+                resolve(data);
+            });
+    }) 
 
     const increaseTheCount = () => {
         if (count < 100) {
@@ -72,8 +80,8 @@ function ContextProvider(props) {
             lastName, 
             handleFirstNameInput, 
             handleLastNameInput, 
-            getOtherJokeFromOtherNames}}
-        >
+            getOtherJokeFromOtherNames,
+        }}>
             {props.children}
         </Context.Provider>
     )
