@@ -6,8 +6,6 @@ const API = "http://api.icndb.com/jokes/random";
 
 function ContextProvider(props) {
     const [joke, setJoke] = useState({});
-    const [categories, setCategories] = useState(["categories", "explicit", "nerdy"]);
-
     const getRandomJoke = async () => {
         const response = await fetch(API);
         const data = await response.json();
@@ -16,10 +14,9 @@ function ContextProvider(props) {
 
     useEffect(() => {
         getRandomJoke();
-        setCategories(categories);
     }, []);
     return (
-        <Context.Provider value={{joke, categories}}>
+        <Context.Provider value={{joke,setJoke}}>
             {props.children}
         </Context.Provider>
     )
