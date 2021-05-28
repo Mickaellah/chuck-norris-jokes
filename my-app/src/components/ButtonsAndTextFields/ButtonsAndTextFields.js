@@ -3,33 +3,30 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Context} from '../../context/context';
 
 import Buttons from '../Buttons/Buttons';
+import CounterButton from '../Buttons/CounterButton';
 import InputField from '../InputField/InputField';
 
 export default function ButtonsAndTextFields() {
     const [category, setCategory] = useState('category');
-    const [firstName, setFirstName] = useState("Chuck");
-    const [lastName, setLastName] = useState("Norris");
-    const [isTyped, setIsTyped] = useState(true);
 
-    const {joke, setJoke} = useContext(Context);
+    const {
+        joke, 
+        setJoke, 
+        isTyped, 
+        setIsTyped, 
+        firstName, 
+        lastName,
+        handleFirstNameInput,
+        handleLastNameInput,
+        getOtherJokeFromOtherNames
+    } = useContext(Context);
 
     const NerdyJoke = "http://api.icndb.com/jokes/random?limitTo=[nerdy]";
     const ExplicitJoke = "http://api.icndb.com/jokes/random?limitTo=[explicit]";
-    const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${firstName}&lastName=${lastName}`
 
     const handleOnChange = (e) => {
         setCategory(e.target.value);
         setIsTyped(!isTyped);
-    }
-
-    const handleFirstNameInput = (e) => {
-        setFirstName(e.target.value);
-        setIsTyped(isTyped);
-    }
-
-    const handleLastNameInput = (e) => {
-        setLastName(e.target.value);
-        setIsTyped(isTyped);
     }
 
     const selectAGategory = async (e) => {
@@ -45,12 +42,6 @@ export default function ButtonsAndTextFields() {
         } else if (value[0].value === "categories") {
             setJoke(joke);
         }
-    }
-
-    const getOtherJokeFromOtherNames = async (e) => {
-        const response = await fetch(NameChangingAPI);
-        const data = await response.json();
-        setJoke(data);
     }
 
     const fetchAJoke = (e) => {
@@ -75,7 +66,12 @@ export default function ButtonsAndTextFields() {
                 onChangeForFirstName={handleFirstNameInput} 
                 onChangeForLastName={handleLastNameInput}
             />
-            <Buttons onClick={fetchAJoke} type="click" text={`Draw a random ${firstName} ${lastName} Joke`} />
+            <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${firstName} ${lastName} Joke`} />
+
+            <div>
+                <CounterButton />
+                <Buttons type="submit" text="Save Jokes" />
+            </div>
         </form>
     )
 }
