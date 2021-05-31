@@ -1,5 +1,6 @@
 import React, {useContext, useState} from 'react';
 import style from 'styled-components';
+import DownloadLink from 'react-download-link';
 
 import {Context} from '../../context/context';
 
@@ -31,19 +32,18 @@ const SaveButtonContainer = style.div`
     padding-block-end: 72px;
     margin-block-start: 52px;
     display: flex;
+`;
 
-    a {
-        margin-inline-start: 8px;
-        width: 100%;
-        background-color: #f5f6f8;
-        color: #34394f;
-        border-radius: 4px;
-        text-align: center;
-        padding-block-start: 16px;
-        text-decoration: none;
-        font-size: 16px;
-        line-height: 26px;
-    }
+const SaveButton = style.div`
+    margin-inline-start: 8px;
+    width: 100%;
+    background-color: #f5f6f8;
+    border-radius: 4px;
+    text-align: center;
+    padding-block-start: 16px;
+    font-size: 16px;
+    line-height: 26px;
+    cursor: pointer;
 `;
 
 export default function ButtonsAndTextFields() {
@@ -54,12 +54,14 @@ export default function ButtonsAndTextFields() {
         setJoke, 
         isTyped, 
         setIsTyped, 
-        firstName, 
-        lastName,
-        handleFirstNameInput,
-        handleLastNameInput,
-        handleNameInput,
+        // firstName, 
+        // lastName,
+        // handleFirstNameInput,
+        // handleLastNameInput,
+        name,
+        handleSubmit,
         getOtherJokeFromOtherNames,
+        getAJokeByNumber,
     } = useContext(Context);
 
     const NerdyJoke = "http://api.icndb.com/jokes/random?limitTo=[nerdy]";
@@ -102,19 +104,19 @@ export default function ButtonsAndTextFields() {
                 <option value="nerdy">nerdy</option>
             </select>
             <InputField 
-                firstName={firstName}
-                lastName={lastName}
-                onChangeForFirstName={handleFirstNameInput} 
-                onChangeForLastName={handleLastNameInput}
-                onChange={handleNameInput}
+                firstName={name.firstName}
+                lastName={name.lastName}
+                // onChangeForFirstName={handleFirstNameInput} 
+                // onChangeForLastName={handleLastNameInput}
+                onChange={handleSubmit}
             />
-            <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${firstName} ${lastName} Joke`} />
+            <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${name.firstName} ${name.lastName} Joke`} />
 
             <SaveButtonContainer>
                 <CounterButton />
-                <a href={`${joke}`} download="joke.txt">
-                    Save Jokes
-                </a>
+                <SaveButton>
+                    <DownloadLink style={{color: '#34394f', textDecoration: 'none'}} label="Save Jokes" filename="jokes.txt" exportFile={() => Promise.resolve(getAJokeByNumber(joke))} />
+                </SaveButton>
             </SaveButtonContainer>
         </Form>
     )

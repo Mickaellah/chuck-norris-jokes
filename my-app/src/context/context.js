@@ -7,11 +7,11 @@ function ContextProvider(props) {
     const [count, setCount] = useState(0);
     const [firstName, setFirstName] = useState("Chuck");
     const [lastName, setLastName] = useState("Norris");
-    // const [name, setName] = useState({firstName: 'Chuck', lastName: 'Norris', fullName: `${firstName} ${lastName}`});
+    const [name, setName] = useState({firstName: 'Chuck', lastName: 'Norris', fullName: `${firstName} ${lastName}`});
     const [isTyped, setIsTyped] = useState(true);
 
     const MainAPI = "http://api.icndb.com/jokes/random";
-    const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${firstName}&lastName=${lastName}`;
+    const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${name.firstName}&lastName=${name.lastName}`;
     const NumberAPI = `http://api.icndb.com/jokes/${count}`;
 
 
@@ -21,24 +21,21 @@ function ContextProvider(props) {
         setJoke(data);
     }
 
-    const handleFirstNameInput = (e) => {
-        setFirstName(e.target.value);
-        setIsTyped(isTyped);
-    }
-
-    const handleLastNameInput = (e) => {
-        setLastName(e.target.value);
-        setIsTyped(isTyped);
-    }
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     setName({
-    //         fullName: `${name.firstName} ${name.lastName}`,
-    //         firstName: '',
-    //         lastName: '',
-    //     });
+    // const handleFirstNameInput = (e) => {
+    //     setFirstName(e.target.value);
+    //     setIsTyped(isTyped);
     // }
+
+    // const handleLastNameInput = (e) => {
+    //     setLastName(e.target.value);
+    //     setIsTyped(isTyped);
+    // }
+
+    const handleSubmit = (e, name) => {
+        e.preventDefault();
+        setName({ [name] : e.target.value});
+        setIsTyped(isTyped);
+    }
 
     const getOtherJokeFromOtherNames = async () => {
         const response = await fetch(NameChangingAPI);
@@ -46,17 +43,11 @@ function ContextProvider(props) {
         setJoke(data);
     }
 
-    // const getAJokeByNumber = async () => {
-    //     const response = await fetch(NumberAPI);
-    //     const data = await response.json();
-    //     setJoke(data);
-    // }
-
     const getAJokeByNumber = () => new Promise((resolve, reject) => {
         fetch(NumberAPI)
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                resolve(data);
+                resolve(JSON.stringify(data.value.joke));
             });
     }) 
 
@@ -86,13 +77,14 @@ function ContextProvider(props) {
             decreaseTheCount, 
             isTyped, 
             setIsTyped, 
-            firstName, 
-            lastName, 
-            handleFirstNameInput, 
-            handleLastNameInput,
-            // name, 
-            // handleSubmit,
+            // firstName, 
+            // lastName, 
+            // handleFirstNameInput, 
+            // handleLastNameInput,
+            name, 
+            handleSubmit,
             getOtherJokeFromOtherNames,
+            getAJokeByNumber,
         }}>
             {props.children}
         </Context.Provider>
