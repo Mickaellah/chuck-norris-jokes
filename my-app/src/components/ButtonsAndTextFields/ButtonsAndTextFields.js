@@ -1,10 +1,50 @@
 import React, {useContext, useState} from 'react';
+import style from 'styled-components';
 
 import {Context} from '../../context/context';
 
 import Buttons from '../Buttons/Buttons';
 import CounterButton from '../Buttons/CounterButton';
 import InputField from '../InputField/InputField';
+
+const Form = style.form`
+    margin-inline: 58px;
+
+    select {
+        width: 100%;
+        padding: 16px;
+        border: solid 1px #c4c4c4;
+        background-color: #ffffff;
+        color: #c4c4c4;
+        border-radius: 6px;
+        text-transform: capitalize;
+
+        option {
+            margin-inline: 8px;
+            padding-block: 16px;
+        }
+    }
+   
+`;
+
+const SaveButtonContainer = style.div`
+    padding-block-end: 72px;
+    margin-block-start: 52px;
+    display: flex;
+
+    a {
+        margin-inline-start: 8px;
+        width: 100%;
+        background-color: #f5f6f8;
+        color: #34394f;
+        border-radius: 4px;
+        text-align: center;
+        padding-block-start: 16px;
+        text-decoration: none;
+        font-size: 16px;
+        line-height: 26px;
+    }
+`;
 
 export default function ButtonsAndTextFields() {
     const [category, setCategory] = useState('category');
@@ -18,6 +58,7 @@ export default function ButtonsAndTextFields() {
         lastName,
         handleFirstNameInput,
         handleLastNameInput,
+        handleNameInput,
         getOtherJokeFromOtherNames,
     } = useContext(Context);
 
@@ -54,7 +95,7 @@ export default function ButtonsAndTextFields() {
     }
 
     return (
-        <form>
+        <Form>
             <select name="categories" value={category} onChange={handleOnChange}>
                 <option value="categories">categories</option>
                 <option value="explicit">explicit</option>
@@ -65,15 +106,16 @@ export default function ButtonsAndTextFields() {
                 lastName={lastName}
                 onChangeForFirstName={handleFirstNameInput} 
                 onChangeForLastName={handleLastNameInput}
+                onChange={handleNameInput}
             />
             <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${firstName} ${lastName} Joke`} />
 
-            <div>
+            <SaveButtonContainer>
                 <CounterButton />
                 <a href={`${joke}`} download="joke.txt">
                     Save Jokes
                 </a>
-            </div>
-        </form>
+            </SaveButtonContainer>
+        </Form>
     )
 }
