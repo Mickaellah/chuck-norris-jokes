@@ -7,11 +7,11 @@ function ContextProvider(props) {
     const [count, setCount] = useState(0);
     const [firstName, setFirstName] = useState("Chuck");
     const [lastName, setLastName] = useState("Norris");
-    const [name, setName] = useState({firstName: 'Chuck', lastName: 'Norris', fullName: `${firstName} ${lastName}`});
+    const [name, setName] = useState('');
     const [isTyped, setIsTyped] = useState(true);
 
     const MainAPI = "http://api.icndb.com/jokes/random";
-    const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${name.firstName}&lastName=${name.lastName}`;
+    const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${firstName}&lastName=${lastName}`;
     const NumberAPI = `http://api.icndb.com/jokes/${count}`;
 
 
@@ -21,19 +21,11 @@ function ContextProvider(props) {
         setJoke(data);
     }
 
-    // const handleFirstNameInput = (e) => {
-    //     setFirstName(e.target.value);
-    //     setIsTyped(isTyped);
-    // }
-
-    // const handleLastNameInput = (e) => {
-    //     setLastName(e.target.value);
-    //     setIsTyped(isTyped);
-    // }
-
-    const handleSubmit = (e, name) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setName({ [name] : e.target.value});
+        setFirstName(e.target.value);
+        setLastName(e.target.value);
+        setName(e.target.value);
         setIsTyped(isTyped);
     }
 
@@ -77,10 +69,8 @@ function ContextProvider(props) {
             decreaseTheCount, 
             isTyped, 
             setIsTyped, 
-            // firstName, 
-            // lastName, 
-            // handleFirstNameInput, 
-            // handleLastNameInput,
+            firstName, 
+            lastName, 
             name, 
             handleSubmit,
             getOtherJokeFromOtherNames,

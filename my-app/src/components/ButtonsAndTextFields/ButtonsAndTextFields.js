@@ -19,6 +19,8 @@ const Form = style.form`
         color: #c4c4c4;
         border-radius: 6px;
         text-transform: capitalize;
+        font-size: 16px;
+        line-height: 26px;
 
         option {
             margin-inline: 8px;
@@ -54,10 +56,8 @@ export default function ButtonsAndTextFields() {
         setJoke, 
         isTyped, 
         setIsTyped, 
-        // firstName, 
-        // lastName,
-        // handleFirstNameInput,
-        // handleLastNameInput,
+        firstName, 
+        lastName,
         name,
         handleSubmit,
         getOtherJokeFromOtherNames,
@@ -104,13 +104,12 @@ export default function ButtonsAndTextFields() {
                 <option value="nerdy">nerdy</option>
             </select>
             <InputField 
-                firstName={name.firstName}
-                lastName={name.lastName}
-                // onChangeForFirstName={handleFirstNameInput} 
-                // onChangeForLastName={handleLastNameInput}
+                firstName={firstName}
+                lastName={lastName}
+                name={name}
                 onChange={handleSubmit}
             />
-            <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${name.firstName} ${name.lastName} Joke`} />
+            <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${firstName} ${lastName} Joke`} />
 
             <SaveButtonContainer>
                 <CounterButton />
