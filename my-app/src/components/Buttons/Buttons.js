@@ -6,8 +6,7 @@ const Container = style.div`
         width: 100%;
         background-color: #34394f;
         color: #ffffff;
-        padding-block-start: 17px;
-        padding-block-end: 15px;
+        padding-block: 20px;
         margin-block-start: 32px;
         font-size: 16px;
         line-heigth: 26px;

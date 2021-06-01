@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import style from 'styled-components';
 import DownloadLink from 'react-download-link';
 
@@ -8,12 +8,15 @@ import Buttons from '../Buttons/Buttons';
 import CounterButton from '../Buttons/CounterButton';
 import InputField from '../InputField/InputField';
 
+// import ArrowDown from '../../icons/arrow-down.svg';
+
 const Form = style.form`
     margin-inline: 58px;
 
     select {
         width: 100%;
-        padding: 16px;
+        padding-block: 19px;
+        padding-inline: 12px;
         border: solid 1px #c4c4c4;
         background-color: #ffffff;
         color: #c4c4c4;
@@ -26,8 +29,7 @@ const Form = style.form`
             margin-inline: 8px;
             padding-block: 16px;
         }
-    }
-   
+    } 
 `;
 
 const SaveButtonContainer = style.div`
@@ -48,74 +50,51 @@ const SaveButton = style.div`
     cursor: pointer;
 `;
 
+const SaveButtonActive = style.div`
+    margin-inline-start: 8px;
+    width: 100%;
+    background-color: #34394f;
+    border-radius: 4px;
+    text-align: center;
+    padding-block-start: 16px;
+    font-size: 16px;
+    line-height: 26px;
+    cursor: pointer;
+`;
+
 export default function ButtonsAndTextFields() {
-    const [category, setCategory] = useState('category');
 
     const {
-        joke, 
-        setJoke, 
-        isTyped, 
-        setIsTyped, 
-        firstName, 
-        lastName,
+        joke,  
         name,
         handleSubmit,
-        getOtherJokeFromOtherNames,
+        handleSelect,
+        category,
+        count,
+        fetchARandomJoke,
         getAJokeByNumber,
     } = useContext(Context);
 
-    const NerdyJoke = "http://api.icndb.com/jokes/random?limitTo=[nerdy]";
-    const ExplicitJoke = "http://api.icndb.com/jokes/random?limitTo=[explicit]";
-
-    const handleOnChange = (e) => {
-        setCategory(e.target.value);
-        setIsTyped(!isTyped);
-    }
-
-    const selectAGategory = async (e) => {
-        const value = document.getElementsByTagName('select');
-        if (value[0].value === "nerdy") {
-            const response = await fetch(NerdyJoke);
-            const data = await response.json();
-            setJoke(data);
-        } else if (value[0].value === "explicit") {
-            const res = await fetch(ExplicitJoke);
-            const result = await res.json();
-            setJoke(result);
-        } else if (value[0].value === "categories") {
-            setJoke(joke);
-        }
-    }
-
-    const fetchAJoke = (e) => {
-        e.preventDefault();
-        if (isTyped === isTyped) {
-            getOtherJokeFromOtherNames();
-        } else {
-            selectAGategory();
-        }
-    }
-
     return (
-        <Form>
-            <select name="categories" value={category} onChange={handleOnChange}>
+        <Form onSubmit={handleSubmit}>
+            <select name="categories" value={category} onChange={handleSelect}>
                 <option value="categories">categories</option>
                 <option value="explicit">explicit</option>
                 <option value="nerdy">nerdy</option>
             </select>
-            <InputField 
-                firstName={firstName}
-                lastName={lastName}
-                name={name}
-                onChange={handleSubmit}
-            />
-            <Buttons onClick={fetchAJoke} type="button" text={`Draw a random ${firstName} ${lastName} Joke`} />
+            <InputField />
+            <Buttons onClick={fetchARandomJoke} type="submit" text={`Draw a random ${name} Joke`} />
 
             <SaveButtonContainer>
                 <CounterButton />
-                <SaveButton>
-                    <DownloadLink style={{color: '#34394f', textDecoration: 'none'}} label="Save Jokes" filename="jokes.txt" exportFile={() => Promise.resolve(getAJokeByNumber(joke))} />
-                </SaveButton>
+                {count <= 0 
+                    ? <SaveButton>
+                        <DownloadLink style={{color: '#34394f', textDecoration: 'none'}} label="Save Jokes" filename="jokes.txt" exportFile={() => Promise.resolve(getAJokeByNumber(joke))} />
+                    </SaveButton>
+                    : <SaveButtonActive>
+                        <DownloadLink style={{color: '#ffffff', textDecoration: 'none'}} label="Save Jokes" filename="jokes.txt" exportFile={() => Promise.resolve(getAJokeByNumber(joke))} />
+                    </SaveButtonActive>
+                }
             </SaveButtonContainer>
         </Form>
     )
