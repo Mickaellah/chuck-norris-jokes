@@ -8,14 +8,32 @@ import Buttons from '../Buttons/Buttons';
 import CounterButton from '../Buttons/CounterButton';
 import InputField from '../InputField/InputField';
 
-// import ArrowDown from '../../icons/arrow-down.svg';
-
 const Form = style.form`
     margin-inline: 58px;
+`;
+
+const Select = style.div`
+    position: relative;
+
+    ::after{
+        content: "›";
+        color: #c4c4c4;
+        position: absolute;
+        top: 20px;
+        right: 16px;
+        transition: all 0.3s linear;
+        transform: rotate(90deg);
+        white-space: pre;
+        vertical-align: middle;
+    }
+
+    :active::after {
+        transform: rotate(-90deg);
+    }
 
     select {
         width: 100%;
-        padding-block: 19px;
+        padding-block: 16px;
         padding-inline: 12px;
         border: solid 1px #c4c4c4;
         background-color: #ffffff;
@@ -24,16 +42,23 @@ const Form = style.form`
         text-transform: capitalize;
         font-size: 16px;
         line-height: 26px;
-
-        option {
-            margin-inline: 8px;
-            padding-block: 16px;
-        }
-    } 
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
 `;
 
-const SaveButtonContainer = style.div`
+const CounterContenaire = style.div`
     padding-block-end: 72px;
+
+    & > p {
+        color: #f39a9a;
+        font-size: 16px;
+        line-height: 26px;
+        margin-block-end: -36px;
+    }
+`;
+
+const ButtonContainer = style.div`
     margin-block-start: 52px;
     display: flex;
 `;
@@ -77,25 +102,58 @@ export default function ButtonsAndTextFields() {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <select name="categories" value={category} onChange={handleSelect}>
-                <option value="categories">categories</option>
-                <option value="explicit">explicit</option>
-                <option value="nerdy">nerdy</option>
-            </select>
+            <Select>
+                <select name="categories" value={category} onChange={handleSelect}>
+                    <option value="categories">categories</option>
+                    <option value="explicit">explicit</option>
+                    <option value="nerdy">nerdy</option>
+                </select>
+            </Select>
             <InputField />
             <Buttons onClick={fetchARandomJoke} type="submit" text={`Draw a random ${name} Joke`} />
 
-            <SaveButtonContainer>
-                <CounterButton />
-                {count <= 0 
-                    ? <SaveButton>
-                        <DownloadLink style={{color: '#34394f', textDecoration: 'none'}} label="Save Jokes" filename="jokes.txt" exportFile={() => Promise.resolve(getAJokeByNumber(joke))} />
-                    </SaveButton>
-                    : <SaveButtonActive>
-                        <DownloadLink style={{color: '#ffffff', textDecoration: 'none'}} label="Save Jokes" filename="jokes.txt" exportFile={() => Promise.resolve(getAJokeByNumber(joke))} />
-                    </SaveButtonActive>
+            <CounterContenaire>
+                <ButtonContainer>
+                    <CounterButton />
+                    {count <= 0 
+                        ? <SaveButton 
+                            style={count <= 100 
+                                ? {cursor: 'pointer'} 
+                                : {cursor: 'not-allowed'}}
+                        >
+                            <DownloadLink 
+                                style={count <= 100 
+                                    ? {color: '#34394f', textDecoration: 'none', cursor: 'pointer'} 
+                                    : {color: '#34394f', textDecoration: 'none', cursor: 'not-allowed'}
+                                } 
+                                label="Save Jokes" 
+                                filename="jokes.txt" 
+                                exportFile={() => Promise.resolve(getAJokeByNumber(joke))} 
+                            />
+                        </SaveButton>
+                        : <SaveButtonActive 
+                            style={count <= 100 
+                                ? {cursor: 'pointer'} 
+                                : {cursor: 'not-allowed'}
+                            }
+                        >
+                            <DownloadLink 
+                                style={count <= 100 
+                                    ? {color: '#ffffff', textDecoration: 'none', cursor: 'pointer'} 
+                                    : {color: '#ffffff', textDecoration: 'none', cursor: 'not-allowed'}}
+                                    
+                                label="Save Jokes" 
+                                filename="jokes.txt" 
+                                exportFile={() => Promise.resolve(getAJokeByNumber(joke))} 
+                            />
+                        </SaveButtonActive>
+                    }
+                </ButtonContainer>
+                {count > 100 
+                    ? <p>You can pick a number from 1 to 100.</p>
+                    : ""
                 }
-            </SaveButtonContainer>
+            </CounterContenaire>
         </Form>
     )
 }
