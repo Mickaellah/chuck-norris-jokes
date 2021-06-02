@@ -12,11 +12,10 @@ function ContextProvider(props) {
     const firstName = String(name).split(' ').slice(0, 1);
     const lastName = String(name).split(' ').slice(1);
 
-    const MainAPI = "http://api.icndb.com/jokes/random";
-    const NameChangingAPI = `http://api.icndb.com/jokes/random?firstName=${firstName}&lastName=${lastName}`;
-    const NerdyJoke = "http://api.icndb.com/jokes/random?limitTo=[nerdy]";
-    const ExplicitJoke = "http://api.icndb.com/jokes/random?limitTo=[explicit]";
-    const NumberAPI = `http://api.icndb.com/jokes/${count}`;
+    const MainAPI = "https://api.icndb.com/jokes/random";
+    const NameChangingAPI = `https://api.icndb.com/jokes/random?firstName=${firstName}&lastName=${lastName}`;
+    const CategoryJoke = `https://api.icndb.com/jokes/random?limitTo=[${category}]`;
+    const NumberAPI = `https://api.icndb.com/jokes/${count}`;
 
 
     const getRandomJoke = async () => {
@@ -47,23 +46,14 @@ function ContextProvider(props) {
     }
 
     const selectAGategory = async (e) => {
-        const value = document.getElementsByTagName('select');
-        if (value[0].value === "nerdy") {
-            const response = await fetch(NerdyJoke);
-            const data = await response.json();
-            setJoke(data);
-        } else if (value[0].value === "explicit") {
-            const res = await fetch(ExplicitJoke);
-            const result = await res.json();
-            setJoke(result);
-        } else if (value[0].value === "categories") {
-            setJoke(joke);
-        }
+        const response = await fetch(CategoryJoke);
+        const data = await response.json();
+        setJoke(data);
     }
 
     const fetchARandomJoke = (e) => {
         e.preventDefault();
-        if (isTyped === isTyped) {
+        if (isTyped === true) {
             getOtherJokeFromOtherNames();
         } else {
             selectAGategory();
@@ -91,6 +81,7 @@ function ContextProvider(props) {
     useEffect(() => {
         getRandomJoke();
         getAJokeByNumber();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

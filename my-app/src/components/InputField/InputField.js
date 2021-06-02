@@ -14,6 +14,7 @@ const InputContainer = style.div`
         border-radius: 6px;
         border: solid 1px #c4c4c4;
         color: transparent;
+        background-color: #ffffff;
     }
 
     input:focus {
